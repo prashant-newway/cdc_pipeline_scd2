@@ -49,3 +49,15 @@ with DAG('etl_db_to_db',
             return ['transform','cdc_load']
     
     check_full_load = check_full_load(dag_conf['load_type'])
+
+    full_transform = SQLExecuteQueryOperator(
+        task_id = 'full_transform',
+        conn_id = 'snowflake',
+        sql = 'full_customer_transform.sql',
+    )
+
+    full_load = SQLExecuteQueryOperator(
+        task_id='full_load',
+        conn_id='snowflake',
+        sql='full_load.sql'
+    )
